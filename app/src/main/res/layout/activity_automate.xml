@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        tools:context=".MainActivity">
+    <com.elyeproj.porterduff.AnimateDrawPorterDuffView
+            android:layout_marginTop="16dp"
+            android:id="@+id/animate_draw_porter_duff_dragon"
+            app:draw_porter_duff_image_src="@drawable/dragon"
+            app:draw_porter_duff_image_dst="@drawable/cloud"
+            style="@style/DefaultStyle"/>
+    <com.elyeproj.porterduff.AnimateDrawPorterDuffView
+            android:id="@+id/animate_draw_porter_duff_angel"
+            app:draw_porter_duff_image_src="@drawable/angel"
+            app:draw_porter_duff_image_dst="@drawable/cloud2"
+            style="@style/DefaultStyle"/>
+
+</LinearLayout>
