@@ -3,6 +3,7 @@ package com.elyeproj.porterduff
 import android.content.Context
 import android.graphics.PorterDuff
 import android.util.AttributeSet
+import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,32 +42,15 @@ class AnimateDrawPorterDuffView @JvmOverloads constructor(
     private fun startAnimate() {
         compositeDisposable.add(Observable.interval(0, 1, TimeUnit.SECONDS)
             .flatMap {
-                return@flatMap Observable.create<Int> { emitter ->
-                    if (control == 1) {
-                        for (x in 0 until animationPorterDuff.size) {
-                            emitAndWait(emitter, x)
-                        }
-                    } else {
-                        for (x in (animationPorterDuff.size - 1) downTo 0) {
-                            emitAndWait(emitter, x)
-                        }
-                    }
-                    control *= -1
-                    emitter.onComplete()
-                }
+                return@flatMap Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+                    .take(animationPorterDuff.size.toLong())
+                    .map { it.toInt() }
+                    .doAfterNext { if (it == (animationPorterDuff.size - 1)) control *= -1 }
+                    .map { if (control == 1) it else animationPorterDuff.size - 1 - it }
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe ({ mode = animationPorterDuff[it] }, {} ))
-    }
-
-    private fun emitAndWait(emitter: ObservableEmitter<Int>, x: Int) {
-        emitter.onNext(x)
-        try {
-            Thread.sleep(100)
-        } catch (e: Exception) {
-            // On interrupted, don't care
-        }
+            .subscribe { mode = animationPorterDuff[it] })
     }
 
     private fun stopAnimate() {
