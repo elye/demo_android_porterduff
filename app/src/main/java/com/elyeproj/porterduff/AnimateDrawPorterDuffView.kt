@@ -40,14 +40,16 @@ class AnimateDrawPorterDuffView @JvmOverloads constructor(
     }
 
     private fun startAnimate() {
-        compositeDisposable.add(Observable.interval(0, 1, TimeUnit.SECONDS)
+        compositeDisposable.add(Observable
+            .interval(0, 1, TimeUnit.SECONDS)
             .flatMap {
-                return@flatMap Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+                return@flatMap Observable
+                    .interval(0, 100, TimeUnit.MILLISECONDS)
                     .take(animationPorterDuff.size.toLong())
-                    .map { it.toInt() }
-                    .doAfterNext { if (it == (animationPorterDuff.size - 1)) control *= -1 }
-                    .map { if (control == 1) it else animationPorterDuff.size - 1 - it }
             }
+            .map { it.toInt() }
+            .doAfterNext { if (it == (animationPorterDuff.size - 1)) control *= -1 }
+            .map { if (control == 1) it else animationPorterDuff.size - 1 - it }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { mode = animationPorterDuff[it] })
